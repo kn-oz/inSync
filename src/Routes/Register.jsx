@@ -25,9 +25,9 @@ export default function Register() {
 
   const mutation = useMutation((req) => getToken(req.body), {
     async onSuccess(data) {
-      const dataObject = await data.json();
-      const dataToken = dataObject.payload;
-      console.log("token successfully generated", dataToken);
+      const tokenObject = await data.json();
+      const token = tokenObject.payload;
+      console.log("token successfully generated", token);
       try {
         const userCredential = await createUserWithEmailAndPassword(
           auth,
@@ -39,7 +39,7 @@ export default function Register() {
         await setDoc(doc(db, "users", email), {
           email: email,
           uid: user.uid,
-          chat_token: dataToken,
+          chatToken: token,
         });
       } catch (error) {
         console.log("error", error);

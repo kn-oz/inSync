@@ -7,7 +7,8 @@ import { db } from "../firebase";
 export default function Find() {
   const {user} = useContext(AuthContext);
   const person = {
-    displayName: "John Doe",
+    firstName: "John",
+    lastName: "Doe",
     age: 21,
     height: "175",
     mbti: "ENFP",
@@ -35,15 +36,15 @@ export default function Find() {
   return (
     <div>
       <h1>Find</h1>
-      {people.length > 0} { <><img src={people[index].imageSource} alt={people[index].displayName} />
-      <h2>{people[index].displayName}</h2>
+      {people.length > 0 && <div><img src={people[index].photoURL} alt={people[index].firstName} />
+      <h2>{`${people[index].firstName} ${people[index].lastName}`}</h2>
       <h3>{people[index].age}</h3>
       <h3>{people[index].height}</h3>
       <h3>{people[index].mbti}</h3>
       <h3>{people[index].hometown}</h3>
       <h3>{people[index].bio}</h3>
       <button onClick={() => setIndex(prev => prev + 1)}>Reject</button>
-      <button onClick={() => console.log("start chatting")}>Connect</button> </>}
+      <button onClick={() => console.log("start chatting")}>Connect</button> </div>}
     </div>
   );
 }

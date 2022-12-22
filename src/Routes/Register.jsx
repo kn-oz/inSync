@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc} from "firebase/firestore";
 import { auth, db } from "../firebase";
 
 const getToken = (body) =>
@@ -23,39 +22,43 @@ export default function Register() {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
 
-  const mutation = useMutation((req) => getToken(req.body), {
-    async onSuccess(data) {
-      const tokenObject = await data.json();
-      const token = tokenObject.payload;
-      console.log("token successfully generated", token);
-      try {
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        const user = userCredential.user;
-
-        await setDoc(doc(db, "users", email), {
-          email: email,
-          uid: user.uid,
-          chatToken: token,
-        });
-      } catch (error) {
-        console.log("error", error);
-        setError(true);
-        setLoading(false);
-      }
-    },
-    onError(error) {
-      console.log("there was an error", error);
-    },
-  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setButton(true);
-    await mutation.mutateAsync({ body: { user_id: email } });
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      const tokenResponse = await fetch("http://localhost:5500/api/get-token", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user_id: user.uid }),
+      });
+
+      const tokenObject = await tokenResponse.json();
+      const token = tokenObject.payload;
+      
+     await setDoc(doc(db, "users", email), {
+      email: email,
+      uid: user.uid,
+      chatToken: token
+    });
+
+    } catch (error) {
+      console.log("error", error);
+      setError(true);
+      setLoading(false);
+    }
+
+     
 
     //navigate to profile page
     navigate(`/insync/profile`);

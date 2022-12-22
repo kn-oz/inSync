@@ -1,13 +1,14 @@
 import { createContext, useEffect, useState } from "react";
 import {onAuthStateChanged } from "firebase/auth";
-import { auth } from "../firebase";
+import { getDoc, doc } from 'firebase/firestore'
+import { auth, db } from "../firebase";
 
 
 export const AuthContext = createContext(null);
+export const UserDataContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState({});
-
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -22,5 +23,32 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ user: currentUser }}>{children}</AuthContext.Provider>
+  );
+}
+
+
+export const UserDataProvider = ({ children }) => {
+  const [userData, setUserData] = useState({});
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const getUserData = async () => {
+          const userDocSnap = await getDoc(doc(db, 'users', user.email));
+          console.log('getting user data effect was called');
+          console.log(userDocSnap.data());
+            setUserData(userDocSnap.data());
+        };
+        getUserData();
+      } else {
+        setUserData(null);
+      }
+      });
+    return () => unsub();
+  }, []);
+  
+
+  return (
+    <UserDataContext.Provider value={{ userData }}>{children}</UserDataContext.Provider>
   );
 }

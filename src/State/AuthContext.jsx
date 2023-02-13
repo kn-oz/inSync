@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useContext } from "react";
 import {onAuthStateChanged } from "firebase/auth";
 import { getDoc, doc } from 'firebase/firestore'
 import { auth, db } from "../firebase";
@@ -9,7 +9,9 @@ export const UserDataContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState({});
+  console.log("auth provider mounted")
   useEffect(() => {
+    console.log("useeffect is being called")
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
         setCurrentUser(user);
@@ -26,11 +28,15 @@ export const AuthProvider = ({ children }) => {
   );
 }
 
-
+{/*
 export const UserDataProvider = ({ children }) => {
   const [userData, setUserData] = useState({});
 
+  const user = useContext(AuthContext);
+  console.log(user);
+
   useEffect(() => {
+    console.log("useeffect is being called")
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
         const getUserData = async () => {
@@ -45,10 +51,10 @@ export const UserDataProvider = ({ children }) => {
       }
       });
     return () => unsub();
-  }, []);
+  }, [user]);
   
 
   return (
-    <UserDataContext.Provider value={{ userData }}>{children}</UserDataContext.Provider>
+    <UserDataContext.Provider value={ userData }>{children}</UserDataContext.Provider>
   );
-}
+}*/}

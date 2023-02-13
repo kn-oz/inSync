@@ -1,17 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { doc, setDoc} from "firebase/firestore";
+import { doc, setDoc, updateDoc} from "firebase/firestore";
 import { auth, db } from "../firebase";
 
-const getToken = (body) =>
-  fetch("http://localhost:5500/api/get-token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
+
 
 export default function Register() {
   const [error, setError] = useState("");
@@ -34,7 +27,7 @@ export default function Register() {
       );
       const user = userCredential.user;
 
-      const tokenResponse = await fetch("http://localhost:5500/api/get-token", {
+      const tokenResponse = await fetch("https://gwq4t2upsp.ap-northeast-1.awsapprunner.com/api/get-token", {
         method: "POST",
         mode: "cors",
         headers: {
@@ -42,15 +35,18 @@ export default function Register() {
         },
         body: JSON.stringify({ user_id: user.uid }),
       });
-
+      
       const tokenObject = await tokenResponse.json();
       const token = tokenObject.payload;
-      
-     await setDoc(doc(db, "users", email), {
-      email: email,
-      uid: user.uid,
-      chatToken: token
-    });
+
+      console.log(token);
+                 
+      await setDoc(doc(db, "users", user.email), {
+        email: email,
+        uid: user.uid,
+        chatToken: token,
+      });
+  
 
     } catch (error) {
       console.log("error", error);
@@ -58,10 +54,8 @@ export default function Register() {
       setLoading(false);
     }
 
-     
-
     //navigate to profile page
-    navigate(`/insync/profile`);
+    navigate(`/insync/onboarding`);
   };
 
   return (

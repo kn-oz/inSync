@@ -12,6 +12,7 @@ import MatchChat from "./Routes/MatchChat.jsx";
 import Community from "./Routes/Community.jsx";
 import "./index.css";
 import "@stream-io/stream-chat-css/dist/css/index.css";
+import Onboarding from "./Routes/Onboarding.jsx";
 
 //const filters = { type: 'messaging' };
 //const options = { state: true, presence: true, limit: 10 };
@@ -19,6 +20,9 @@ import "@stream-io/stream-chat-css/dist/css/index.css";
 
 function App() {
   const { user } = useContext(AuthContext);
+  //console.log("logging user from App.jsx", Boolean(Object.keys(user).length));
+  //const isUser = Boolean(Object.keys(user).length);
+  //console.log(Boolean(user));
 
   const ProtectedRoute = ({ children }) => {
     if (!user) {
@@ -30,7 +34,7 @@ function App() {
   return (
       <BrowserRouter>
         <Routes>
-          <Route path="/insync/" element={<Home />}>
+          <Route path="/insync/" element={<ProtectedRoute><Home /></ProtectedRoute>}>
             <Route
               index
               element={
@@ -83,6 +87,14 @@ function App() {
           </Route>
           <Route path="/insync/login" element={<Login />} />
           <Route path="/insync/register" element={<Register />} />
+          <Route
+              path="/insync/onboarding"
+              element={
+                <ProtectedRoute>
+                  <Onboarding />
+                </ProtectedRoute>
+              }
+            />
         </Routes>
       </BrowserRouter>
   );

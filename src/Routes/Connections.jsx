@@ -19,7 +19,7 @@ export default function Connections() {
       if (user) {
         const getUserData = async () => {
           const userDocSnap = await getDoc(doc(db, 'users', user.email));
-          console.log('getting user data effect was called');
+          //console.log('getting user data effect was called');
           //console.log(userDocSnap.data());
             setUserData(userDocSnap.data());
         };
@@ -61,10 +61,12 @@ export default function Connections() {
     };
   }, [userData]);
 
+
+
   useEffect(() => {
     if(client) {
       const newChannel = client.channel('messaging', {
-        members: ['i7VeOBgmZBbFPMCwZBBX8s6bh1y1', 'oHtmk8QzPIbv0JcZlbxa66hnmQq2'],
+        members: [userData.uid, 'pWXl32VwwPTCMQsXrhh3ignP1yf2'],
         name: `Shivam and Abhishek`,
       });
       console.log("channel created");

@@ -14,7 +14,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setButton(true);
-    console.log("login function called")
+    //console.log("login function called")
 
     try {
       await signInWithEmailAndPassword(auth, email, password);

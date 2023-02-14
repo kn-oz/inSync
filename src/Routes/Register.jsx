@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc, updateDoc} from "firebase/firestore";
+import { StreamChat } from "stream-chat";
 import { auth, db } from "../firebase";
 
 
@@ -14,6 +15,8 @@ export default function Register() {
 
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+
+  const newClient = new StreamChat(import.meta.env.VITE_STREAMAPPKEY);
 
 
   const handleSubmit = async (e) => {
@@ -39,7 +42,14 @@ export default function Register() {
       const tokenObject = await tokenResponse.json();
       const token = tokenObject.payload;
 
-      console.log(token);
+      //console.log(token);
+
+      newClient.connectUser(
+        {
+          id: user.uid,
+        },
+        token
+      );
                  
       await setDoc(doc(db, "users", user.email), {
         email: email,
@@ -57,6 +67,12 @@ export default function Register() {
     //navigate to profile page
     navigate(`/insync/onboarding`);
   };
+
+  useEffect(() => {
+    return () => {
+      newClient.disconnectUser().then(() => console.log("connection closed"));
+    }
+  })
 
   return (
     <div className="register">

@@ -9,7 +9,8 @@ export const UserDataContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState({});
-  //console.log("auth provider mounted")
+  console.log("auth provider mounted")
+  console.log("logging current user", currentUser);
   useEffect(() => {
     //console.log("useeffect is being called")
     const unsub = onAuthStateChanged(auth, (user) => {

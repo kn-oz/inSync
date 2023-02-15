@@ -54,7 +54,7 @@ export default function Root({ children }) {
               <Link to={"/community"}>Comm</Link>
             </li>
             <li>
-              <Link to={"/connections"}>Matches</Link>
+              <Link to={"/MatchChat"}>Matches</Link>
             </li>
             <li>
               <button onClick={() => signOut(auth)}>Log Out</button>

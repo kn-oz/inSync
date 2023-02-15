@@ -23,7 +23,7 @@ export default function Home({ children }) {
               <Link to={"/insync/community"}>Comm</Link>
             </li>
             <li>
-              <Link to={"/insync/connections"}>Matches</Link>
+              <Link to={"/insync/matches"}>Matches</Link>
             </li>
             <li>
               <button onClick={() => signOut(auth)}>Log Out</button>

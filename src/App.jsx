@@ -7,8 +7,8 @@ import Login from "./Routes/Login.jsx";
 import Home from "./Routes/Home.jsx";
 import Register from "./Routes/Register.jsx";
 import ErrorRoute from "./Routes/ErrorRoute.jsx";
-import Connections from "./Routes/Connections.jsx";
 import MatchChat from "./Routes/MatchChat.jsx";
+import Matches from "./Routes/Matches.jsx";
 import Community from "./Routes/Community.jsx";
 import "./index.css";
 import "@stream-io/stream-chat-css/dist/css/index.css";
@@ -68,15 +68,15 @@ function App() {
               }
             />
             <Route
-              path="connections"
+              path="matches"
               element={
                 <ProtectedRoute>
-                  <Connections />
+                  <Matches />
                 </ProtectedRoute>
               }
             />
             <Route
-              path="matchChat"
+              path="match-chat"
               element={
                 <ProtectedRoute>
                   <MatchChat />

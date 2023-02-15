@@ -1,38 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
-import { useContext } from "react";
+import { getDoc, doc, getDocs, updateDoc, collection, query, where, limit, arrayUnion } from "firebase/firestore";
 import { AuthContext } from "../State/AuthContext";
 import { db } from "../firebase";
+import { MatchesActionDispatchContext } from "../State/MatchContext";
 
 export default function Find() {
   const { user } = useContext(AuthContext);
-  console.log(user);
+  const dispatch = useContext(MatchesActionDispatchContext);
+  console.log("logging user auth data from find component" ,user);
   let navigate = useNavigate();
+  
   const [userData, setUserData] = useState(null);
 
-  const person = {
-    firstName: "John",
-    lastName: "Doe",
-    age: 21,
-    height: "175",
-    mbti: "ENFP",
-    hometown: "New York",
-    bio: "I like to eat food",
-    photoURL:
-      "https://images.unsplash.com/photo-1616480461419-8e1b5e1b5f1a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
-  };
+  const [shouldFetch, setShouldFetch] = useState(false);
 
-  const [people, setPeople] = useState([person]);
+
+  const [people, setPeople] = useState([]);
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    //console.log("use-effect is being called")
+    console.log("use-effect to fetch user data is being called in find component");
       if (user) {
         const getUserData = async () => {
           const userDocSnap = await getDoc(doc(db, 'users', user.email));
-          console.log('getting user data effect was called');
-          //console.log(userDocSnap.data());
+          console.log("logging user data from find.jsx" ,userDocSnap.data());
             setUserData(userDocSnap.data());
         };
         getUserData();
@@ -44,24 +36,51 @@ export default function Find() {
   }, []);
 
   useEffect(() => {
-    console.log(user);
+    console.log("use-effect to fetch people data is being called in find component");
     const getPeopleQuery = query(
       collection(db, "users"),
-      where("chatToken", "!=", String(user.chatToken)),
-      where("gender", "==", "Male")
+      where("uid", "!=", String(user.uid)),
+      limit(7)
     );
-    const getPeople = onSnapshot(getPeopleQuery, (querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        console.log(doc.data());
-        setPeople((people) => [...people, doc.data()]);
-      });
+    const getPeople = async () => {
+      const peopleQuerySnapShot = await getDocs(getPeopleQuery);
+      const peopleData = peopleQuerySnapShot.docs.map(doc => doc.data());
+      console.log("logging people data from find.jsx" ,peopleData);
+      setPeople(peopleData);
+    }
+
+    getPeople();
+
+  }, [userData, shouldFetch]);
+
+
+  const handleMatching = async () => {
+    dispatch({
+      type: "UPDATE_MATCH",
+      payload: people[index]
     });
-    return getPeople;
-  }, [index]);
+    await updateDoc(doc(db, "users", user.email), {
+      matches: arrayUnion(people[index].email),
+    });
+    navigate("/insync/connections")
+  }
 
+  const handleRejection = () => {
+    if(index === people.length-1) {
+      setShouldFetch(fetchFlag => !fetchFlag);
+      setPeople([]);
+      setIndex(0);
+    }
+    setIndex(index => index + 1);
+  }
 
-  const handleMatching = () => {
-    return
+  if (people.length === 0) {
+    return (
+      <div>
+        <h1>Find</h1>
+        <h2>No one to show</h2>
+      </div>
+    );
   }
 
   return (
@@ -80,7 +99,7 @@ export default function Find() {
           <h3>{people[index].hometown}</h3>
           <h3>{people[index].bio}</h3>
           */}
-          <button onClick={() => setIndex((prev) => prev + 1)}>Reject</button>
+          <button onClick={handleRejection}>Reject</button>
           <button onClick={handleMatching}>
             Connect
           </button>{" "}

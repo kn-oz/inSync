@@ -5,6 +5,7 @@ import { Channel, ChannelHeader, MessageList, MessageInput, Thread, Window, Chat
 import { useChatContext } from 'stream-chat-react'
 import { AuthContext } from '../State/AuthContext.jsx'
 import { auth, db } from '../firebase.js'
+import { MatchesDataContext } from '../State/MatchContext.jsx'
 
 
 export default function Connections() {
@@ -12,6 +13,10 @@ export default function Connections() {
   const [client, setClient] = useState(null);
   const [channel, setChannel] = useState(null);
   const { user } = useContext(AuthContext);
+  const {currentMatch: matchData} = useContext(MatchesDataContext);
+
+  console.log('logging match data from connections component', matchData);
+
   const [userData, setUserData] =useState(null);
 
   useEffect(() => {
@@ -66,8 +71,8 @@ export default function Connections() {
   useEffect(() => {
     if(client) {
       const newChannel = client.channel('messaging', {
-        members: [userData.uid, 'pWXl32VwwPTCMQsXrhh3ignP1yf2'],
-        name: `Shivam and Abhishek`,
+        members: [userData.uid, matchData.uid],
+        name: `${userData.firstName} and ${matchData.firstName}`,
       });
       console.log("channel created");
       setChannel(newChannel);

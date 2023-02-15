@@ -55,6 +55,7 @@ export default function Register() {
         email: email,
         uid: user.uid,
         chatToken: token,
+        matches: [],
       });
   
 

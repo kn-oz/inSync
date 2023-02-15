@@ -25,7 +25,7 @@ function authReducer(state, action) {
   switch (action.type) {
     case "UPDATE_MATCH": {
       const newData = action.payload;
-      console.log("logging current match data from match context",newData);
+      //console.log("logging current match data from match context",newData);
       Cookies.set("currentMatch", JSON.stringify(newData))
       return {...state, currentMatch: {...newData} };
     }

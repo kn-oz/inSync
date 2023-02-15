@@ -3,8 +3,6 @@ import ReactDOM from "react-dom/client";
 import { AuthProvider } from "./State/AuthContext.jsx";
 import { MatchProvider } from "./State/MatchContext.jsx";
 import App from "./App";
-import Root from "./Routes/Root.jsx";
-import Error from "./Error.jsx";
 import "./index.css";
 
 

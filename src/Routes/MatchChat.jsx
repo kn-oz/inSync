@@ -1,39 +1,47 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { getDoc, doc } from 'firebase/firestore'
-import { StreamChat } from 'stream-chat'
-import { Channel, ChannelHeader, MessageList, MessageInput, Thread, Window, Chat } from 'stream-chat-react'
-import { useChatContext } from 'stream-chat-react'
-import { AuthContext } from '../State/AuthContext.jsx'
-import { auth, db } from '../firebase.js'
-import { MatchesDataContext } from '../State/MatchContext.jsx'
-
+import React, { useEffect, useState, useContext } from "react";
+import { getDoc, doc } from "firebase/firestore";
+import { StreamChat } from "stream-chat";
+import {
+  Channel,
+  ChannelHeader,
+  MessageList,
+  MessageInput,
+  Thread,
+  Window,
+  Chat,
+} from "stream-chat-react";
+import { useChatContext } from "stream-chat-react";
+import { AuthContext } from "../State/AuthContext.jsx";
+import { auth, db } from "../firebase.js";
+import { MatchesDataContext } from "../State/MatchContext.jsx";
 
 export default function MatchChat() {
-  console.log('MatchChat was called')
+  //console.log('MatchChat was called')
   const [client, setClient] = useState(null);
   const [channel, setChannel] = useState(null);
   const { user } = useContext(AuthContext);
-  const {currentMatch: matchData} = useContext(MatchesDataContext);
+  const { currentMatch: matchData } = useContext(MatchesDataContext);
 
-  console.log('logging match data from MatchChat component', matchData);
+  //const [filter, setFilter] = useState(null);
+  //const [sort, setSort] = useState(null);
 
-  const [userData, setUserData] =useState(null);
+  //console.log('logging match data from MatchChat component', matchData);
+
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     //console.log("use-effect is being called")
-      if (user) {
-        const getUserData = async () => {
-          const userDocSnap = await getDoc(doc(db, 'users', user.email));
-          //console.log('getting user data effect was called');
-          //console.log(userDocSnap.data());
-            setUserData(userDocSnap.data());
-        };
-        getUserData();
-      } else {
-        setUserData(null);
-      }
-      
-    //return () => unsub();
+    if (user) {
+      const getUserData = async () => {
+        const userDocSnap = await getDoc(doc(db, "users", user.email));
+        //console.log('getting user data effect was called');
+        //console.log(userDocSnap.data());
+        setUserData(userDocSnap.data());
+      };
+      getUserData();
+    } else {
+      setUserData(null);
+    }
   }, []);
   //console.log("logging userData from home.jsx", userData);
   useEffect(() => {
@@ -58,7 +66,9 @@ export default function MatchChat() {
         userData.chatToken
       );
 
-      console.log("client connected");
+      //console.log("client connected");
+      //setFilter( { type: "messaging", members: { $in: [userData.uid] } });
+      //setSort( { last_message_at: -1 });
     }
     return () => {
       newClient.off("connection.changed", handleConnectionChange);
@@ -66,34 +76,31 @@ export default function MatchChat() {
     };
   }, [userData]);
 
-
-
   useEffect(() => {
-    if(client) {
-      const newChannel = client.channel('messaging', {
+    if (client) {
+      const newChannel = client.channel("messaging", {
         members: [userData.uid, matchData.uid],
         name: `${userData.firstName} and ${matchData.firstName}`,
       });
-      console.log("channel created");
+      //console.log("channel created");
       setChannel(newChannel);
     }
-  }, [client])
+  }, [client]);
 
   if (!channel) return <div>Loading...</div>;
 
-
   return (
-    <div className='chat'>
-    <Chat client={client} >
-      <Channel channel={channel}>
-        <Window>
-          <ChannelHeader />
-          <MessageList />
-          <MessageInput />
-        </Window>
-        <Thread />
-      </Channel>
+    <div className="chat">
+      <Chat client={client}>
+        <Channel channel={channel}>
+          <Window>
+            <ChannelHeader />
+            <MessageList />
+            <MessageInput />
+          </Window>
+          <Thread />
+        </Channel>
       </Chat>
     </div>
-  )
+  );
 }

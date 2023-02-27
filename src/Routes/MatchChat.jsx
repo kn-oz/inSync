@@ -9,11 +9,13 @@ import {
   Thread,
   Window,
   Chat,
+  ChannelList,
 } from "stream-chat-react";
 import { useChatContext } from "stream-chat-react";
 import { AuthContext } from "../State/AuthContext.jsx";
 import { auth, db } from "../firebase.js";
 import { MatchesDataContext } from "../State/MatchContext.jsx";
+import { useUser } from "../State/Hooks.js";
 
 export default function MatchChat() {
   //console.log('MatchChat was called')
@@ -22,27 +24,13 @@ export default function MatchChat() {
   const { user } = useContext(AuthContext);
   const { currentMatch: matchData } = useContext(MatchesDataContext);
 
-  //const [filter, setFilter] = useState(null);
-  //const [sort, setSort] = useState(null);
+  const [filter, setFilter] = useState(null);
+  const [sort, setSort] = useState(null);
 
   //console.log('logging match data from MatchChat component', matchData);
 
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useUser();
 
-  useEffect(() => {
-    //console.log("use-effect is being called")
-    if (user) {
-      const getUserData = async () => {
-        const userDocSnap = await getDoc(doc(db, "users", user.email));
-        //console.log('getting user data effect was called');
-        //console.log(userDocSnap.data());
-        setUserData(userDocSnap.data());
-      };
-      getUserData();
-    } else {
-      setUserData(null);
-    }
-  }, []);
   //console.log("logging userData from home.jsx", userData);
   useEffect(() => {
     //console.log("stream useeffect was called")
@@ -67,8 +55,8 @@ export default function MatchChat() {
       );
 
       //console.log("client connected");
-      //setFilter( { type: "messaging", members: { $in: [userData.uid] } });
-      //setSort( { last_message_at: -1 });
+      setFilter( { type: "messaging", members: { $in: [userData.uid] } });
+      setSort( { last_message_at: -1 });
     }
     return () => {
       newClient.off("connection.changed", handleConnectionChange);
@@ -92,9 +80,9 @@ export default function MatchChat() {
   return (
     <div className="chat">
       <Chat client={client}>
+        <h1>{matchData.firstName}</h1>
         <Channel channel={channel}>
           <Window>
-            <ChannelHeader />
             <MessageList />
             <MessageInput />
           </Window>

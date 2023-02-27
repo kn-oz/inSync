@@ -15,32 +15,18 @@ import { getDoc, doc } from "firebase/firestore";
 import { db } from "../firebase.js";
 import { AuthContext } from "../State/AuthContext.jsx";
 import { MatchesActionDispatchContext } from "../State/MatchContext.jsx";
+import { useUser } from "../State/Hooks.js";
 
 export default function Matches() {
-  const { user } = useContext(AuthContext);
-  const dispatch = useContext(MatchesActionDispatchContext);
+
+  const [userData, setUserData] = useUser();
+  //const dispatch = useContext(MatchesActionDispatchContext);
   //console.log("logging user auth data from find component" ,user);
 
   const [client, setClient] = useState(null);
   let navigate = useNavigate();
 
-  const [userData, setUserData] = useState(null);
   const [channels, setChannels] = useState(null);
-
-  useEffect(() => {
-    //console.log("use-effect is being called")
-    if (user) {
-      const getUserData = async () => {
-        const userDocSnap = await getDoc(doc(db, "users", user.email));
-        //console.log('getting user data effect was called');
-        //console.log(userDocSnap.data());
-        setUserData(userDocSnap.data());
-      };
-      getUserData();
-    } else {
-      setUserData(null);
-    }
-  }, []);
 
   useEffect(() => {
     //console.log("stream useeffect was called")
@@ -69,10 +55,26 @@ export default function Matches() {
     };
   }, [userData]);
 
+  useEffect(() => {
+    const getChannels = async () => {
+      const filters = { type: "messaging", members: { $in: [userData.uid] } };
+      const sort = { last_message_at: -1 };
+      const channelList = await client.queryChannels(filters, sort, {
+        watch: true,
+        state: true,
+      });
+      setChannels(channelList);
+      console.log(channelList);
+    }
+
+    //getChannels();
+    
+  }, [client]);
+
   if (!client) return <div>Loading...</div>;
 
   return (
-    <div>
+    <div className="">
       <Chat client={client} >
         <ChannelList
           filters={{ type: "messaging", members: { $in: [userData.uid] } }}

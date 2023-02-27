@@ -1,12 +1,13 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { updateDoc, doc, serverTimestamp, Timestamp } from "firebase/firestore";
 import { db, storage } from "../firebase";
 import { AuthContext } from "../State/AuthContext";
+import placeholderImage from "../assets/placeholder.png"
 
 const style = {
   input: {
-    display: "block",
+    display: "none",
     marginBottom: "10px",
   },
   container: {
@@ -39,17 +40,18 @@ const style = {
   },
 };
 
-const ImageUpload = ({ onboardingIdx, setOnboardingIdx }) => {
-  const { user } = useContext(AuthContext);
-  const [image, setImage] = useState(null);
-  const [imageUpload, setImageUpload] = useState(null);
+const ImageUpload = (props) => {
+  console.log("image upload mounted");
+  console.log(props.imageUpload)
+  console.log(Boolean(props.imageUpload))
+  const [image, setImage] = useState(props?.imageUpload);
+  const {setImageUpload} = props;
   // ...
-
+  const fileRef = useRef();
   const handleImageChange = (event) => {
     //console.log(event.target.files[0]);
     const file = event.target.files[0];
 
-    
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
@@ -60,68 +62,66 @@ const ImageUpload = ({ onboardingIdx, setOnboardingIdx }) => {
     setImageUpload(file);
   };
 
-  const handlePhotoUpload = async (e) => {
-    e.preventDefault();
-
-    const storageRef = ref(storage, `${imageUpload.name}`);
-    try {
-      const uploadTask = await uploadBytes(storageRef, imageUpload);
-      const photoDownloadURL = await getDownloadURL(storageRef);
-      updateDoc(doc(db, "users", user.email), {
-        photo: {
-          id: crypto.randomUUID(),
-          photo: photoDownloadURL,
-          date: Timestamp.now(),
-        },
-        updatedAt: serverTimestamp(),
-      });
-    } catch (error) {
-      console.log("error", error);
-    }
-
-    setOnboardingIdx((idx) => idx + 1);
-  };
-
   return (
     <div className="profile-item">
-    <form onSubmit={handlePhotoUpload}>
-      
       <label className="label">
-            <span className="label-text">Upload Photo</span>
-          </label>
-        <input
-          type="file"
-          accept="image/*"
-          style={style.input}
-          onChange={handleImageChange}
-        />
-        {image ? (
-          <div>
-            <img src={image} alt="Uploaded image" style={style.image} />
-            <button
-              style={style.button}
-              onClick={() => {
-                setImageUpload(null);
-                setImage(null);
-              }}
-            >
-              Remove
-            </button>
-          </div>
-        ) : (
-          <div>
-            <img
-              src="https://via.placeholder.com/100x100.png?text=Placeholder"
-              alt="Placeholder"
-              style={style.placeholder}
+        <span className="label-text text-xl font-medium font-mono">
+          {props.placeholder}
+        </span>
+      </label>
+      {image ? (
+        <div className="flex flex-col items-center justify-center">
+          <button
+            type="button"
+            onClick={() => {
+              fileRef.current.click();
+            }}
+          >
+            <input
+              type="file"
+              accept="image/*"
+              id={props.id}
+              style={{ display: "none" }}
+              onChange={handleImageChange}
+              ref={fileRef}
+              className="hidden"
             />
-          </div>
-        )}
+            <div className="flex items-center justify-center">
+              <img
+                src={image}
+                alt="Uploaded image"
+                className="block rounded-lg w-96 md:w-[484px] md:aspect-[13/16] md:object-contain"
+              />
+            </div>
+          </button>
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center">
+          <button
+            type="button"
+            onClick={() => {
+              fileRef.current.click();
+            }}
+          >
+            <input
+              type="file"
+              accept="image/*"
+              id={props.id}
+              onChange={handleImageChange}
+              ref={fileRef}
+              className="hidden"
+            />
+            <div className="flex items-center justify-center">
+              <img
+                src={placeholderImage}
+                alt="Placeholder"
+                className="block rounded-lg w-96 md:w-[484px] md:aspect-[13/16] md:object-contain"
+              />
+            </div>
+          </button>
+        </div>
+      )}
       
-      <button type="submit" className="btn bg-accent text-accent-content">
-        Next
-      </button>
-    </form>
     </div>
   );
 };

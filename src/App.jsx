@@ -10,6 +10,7 @@ import ErrorRoute from "./Routes/ErrorRoute.jsx";
 import MatchChat from "./Routes/MatchChat.jsx";
 import Matches from "./Routes/Matches.jsx";
 import Community from "./Routes/Community.jsx";
+import EditProfile from "./Routes/EditProfile.jsx";
 import "./index.css";
 import "@stream-io/stream-chat-css/dist/css/index.css";
 import Onboarding from "./Routes/Onboarding.jsx";
@@ -32,71 +33,86 @@ function App() {
   };
 
   return (
-      <BrowserRouter>
-        <Routes>
-          <Route path="/insync/" element={<ProtectedRoute><Home /></ProtectedRoute>}>
-            <Route
-              index
-              element={
-                <ProtectedRoute>
-                  <Find />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="profile"
-              element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="find"
-              element={
-                <ProtectedRoute>
-                  <Find />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="community"
-              element={
-                <ProtectedRoute>
-                  <Community />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="matches"
-              element={
-                <ProtectedRoute>
-                  <Matches />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="match-chat"
-              element={
-                <ProtectedRoute>
-                  <MatchChat />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="*" element={<ErrorRoute />} />
-          </Route>
-          <Route path="/insync/login" element={<Login />} />
-          <Route path="/insync/register" element={<Register />} />
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/insync/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        >
           <Route
-              path="/insync/onboarding"
-              element={
-                <ProtectedRoute>
-                  <Onboarding />
-                </ProtectedRoute>
-              }
-            />
-        </Routes>
-      </BrowserRouter>
+            index
+            element={
+              <ProtectedRoute>
+                <Find />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="edit-profile"
+            element={
+              <ProtectedRoute>
+                <EditProfile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="find"
+            element={
+              <ProtectedRoute>
+                <Find />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="community"
+            element={
+              <ProtectedRoute>
+                <Community />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<ErrorRoute />} />
+        </Route>
+        <Route path="/insync/login" element={<Login />} />
+        <Route path="/insync/register" element={<Register />} />
+        <Route
+          path="/insync/onboarding"
+          element={
+            <ProtectedRoute>
+              <Onboarding />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/insync/matches"
+          element={
+            <ProtectedRoute>
+              <Matches />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/insync/match-chat"
+          element={
+            <ProtectedRoute>
+              <MatchChat />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

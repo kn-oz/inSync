@@ -60,7 +60,7 @@ export default function Register() {
       });
 
       alert("Account created successfully");
-      navigate(`/insync/onboarding`);
+      navigate(`/onboarding`);
     } catch (err) {
       console.log("error", err.message);
       setError(err.message);
@@ -135,7 +135,7 @@ export default function Register() {
           </form>
           <p className="mt-4 text-center text-sm text-gray-500">
             Already have an account?{" "}
-            <Link to={"/insync/login"} className="underline">
+            <Link to={"/login"} className="underline">
               Sign in
             </Link>
           </p>

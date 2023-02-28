@@ -11,7 +11,7 @@ export default function Menu({ onSignOut }) {
         <nav className="p-2 fixed bg-white z-[100] bottom-1 min-w-[99%] border-t sm:static sm:m-0 sm:border-t-0 sm:border-b sm:border-r">
           <ul className="flex justify-between sm:m-0">
             <li>
-              <NavLink className="text-red-300" to={"/insync/profile"}>
+              <NavLink className="text-red-300" to={"/profile"}>
                 {({ isActive }) => (
                   <>
                     {isActive ? (
@@ -27,7 +27,7 @@ export default function Menu({ onSignOut }) {
               </NavLink>
             </li>
             <li>
-              <NavLink to={"/insync/find"}>
+              <NavLink to={"/find"}>
                 {({ isActive }) => (
                   <>
                     {isActive ? (
@@ -43,7 +43,7 @@ export default function Menu({ onSignOut }) {
               </NavLink>
             </li>
             <li>
-              <NavLink to={"/insync/matches"}>
+              <NavLink to={"/matches"}>
                 {({ isActive }) => (
                   <>
                     {isActive ? (

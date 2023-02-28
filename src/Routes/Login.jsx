@@ -20,7 +20,7 @@ export default function Login() {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/insync/find");
+      navigate("/find");
     } catch (err) {
       setError(err.message);
       setButtonState(false);
@@ -88,7 +88,7 @@ export default function Login() {
           </form>
           <p className="mt-4 text-center text-sm text-gray-500">
             No account?{" "}
-            <Link to={"/insync/register"} className="underline">
+            <Link to={"/register"} className="underline">
               Sign up
             </Link>
           </p>

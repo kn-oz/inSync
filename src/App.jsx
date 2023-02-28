@@ -27,7 +27,7 @@ function App() {
 
   const ProtectedRoute = ({ children }) => {
     if (!user) {
-      return <Navigate to="/insync/login"></Navigate>;
+      return <Navigate to="/login"></Navigate>;
     }
     return children;
   };
@@ -36,7 +36,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route
-          path="/insync/"
+          path="/"
           element={
             <ProtectedRoute>
               <Home />
@@ -85,10 +85,10 @@ function App() {
           />
           <Route path="*" element={<ErrorRoute />} />
         </Route>
-        <Route path="/insync/login" element={<Login />} />
-        <Route path="/insync/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route
-          path="/insync/onboarding"
+          path="/onboarding"
           element={
             <ProtectedRoute>
               <Onboarding />
@@ -96,7 +96,7 @@ function App() {
           }
         />
         <Route
-          path="/insync/matches"
+          path="/matches"
           element={
             <ProtectedRoute>
               <Matches />
@@ -104,7 +104,7 @@ function App() {
           }
         />
         <Route
-          path="/insync/match-chat"
+          path="/match-chat"
           element={
             <ProtectedRoute>
               <MatchChat />

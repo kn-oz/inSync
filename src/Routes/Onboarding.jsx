@@ -30,7 +30,7 @@ export default function Onboarding() {
     });
     setInput("");
     if (index === onboardingParameters.length - 1) {
-      navigate("/insync/find");
+      navigate("/find");
     }
     setIndex((index) => index + 1);
   };
@@ -54,7 +54,7 @@ export default function Onboarding() {
       console.log("error", error);
     }
     if (index === onboardingParameters.length - 1) {
-      navigate("/insync/find");
+      navigate("/find");
     }
     setIndex((index) => index + 1);
   };

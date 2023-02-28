@@ -57,7 +57,7 @@ export default function Find() {
     await updateDoc(doc(db, "users", user.email), {
       matches: arrayUnion(people[index].email),
     });
-    navigate("/insync/match-chat");
+    navigate("/match-chat");
   };
 
   const handleRejection = () => {

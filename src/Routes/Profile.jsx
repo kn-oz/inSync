@@ -19,7 +19,7 @@ export default function Profile() {
     <div className="profile p-4 max-w-md">
       <div className="navigation-tab p-2 px-16 mb-2 flex justify-between gap-4 bg-white rounded-md">
         <div className="">
-          <NavLink className="text-red-300" to={"/insync/profile"}>
+          <NavLink className="text-red-300" to={"/profile"}>
             {({ isActive }) => <span className={`${isActive ? 'text-black' : 'text-gray-2'} text-md font-semibold font-serif`}> Profile</span>}
           </NavLink>
         </div>
@@ -27,7 +27,7 @@ export default function Profile() {
           <span>/</span>
         </div>
         <div className="">
-          <NavLink className="text-red-300" to={"/insync/edit-profile"}>
+          <NavLink className="text-red-300" to={"/edit-profile"}>
             {({ isActive }) => <span className={`${isActive ? 'text-black' : 'text-gray-2'} text-md font-semibold font-serif`}> Edit Profile</span>}
           </NavLink>
         </div>

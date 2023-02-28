@@ -29,7 +29,7 @@ export default function Register() {
       const user = userCredential.user;
 
       const tokenResponse = await fetch(
-        "http://localhost:5500/api/get-token",
+        "https://plankton-app-mwexl.ondigitalocean.app/api/get-token",
         {
           method: "POST",
           mode: "cors",

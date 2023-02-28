@@ -80,9 +80,13 @@ export default function MatchChat() {
   return (
     <div className="chat">
       <Chat client={client}>
-        <h1>{matchData.firstName}</h1>
+      <ChannelList
+          filters={{ type: "messaging", members: { $in: [userData.uid] } }}
+          sort={{ last_message_at: -1 }}
+        />
         <Channel channel={channel}>
           <Window>
+          <ChannelHeader />
             <MessageList />
             <MessageInput />
           </Window>

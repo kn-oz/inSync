@@ -8,7 +8,6 @@ export default function TextArea(props) {
       </label>
       <div className="relative mt-1">
         <textarea
-          required
           wrap="soft"
           className="w-full h-48 rounded-lg border border-gray p-4 text-sm shadow-sm font-serif focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
           {...props}

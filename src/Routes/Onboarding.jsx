@@ -68,7 +68,7 @@ export default function Onboarding() {
             <div className="h-full form-control p-12 mx-auto md:mt-64 max-w-lg">
               <div className="onboarding-input mb-4">
                 <Input
-                  isRequired={true}
+                  required={true}
                   id={onboardingParameters[index].id}
                   name={onboardingParameters[index].name}
                   type={onboardingParameters[index].type}

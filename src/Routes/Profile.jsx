@@ -79,7 +79,7 @@ export default function Profile() {
             Interests{" "}
           </p>
           <div className="mt-2 flex flex-wrap">
-            {userData.interests.map((interest) => (
+            {userData.interests && userData.interests.map((interest) => (
               <p key={interest}>
                 <span className="bg-primary text-white inline-flex items-center mr-2 mb-2 rounded-full border border-gray py-2 px-4">
                   {interest}

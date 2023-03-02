@@ -10,7 +10,7 @@
 
 > insync is a social app that helps people meet and chat based on compatibility
 
-### 🏠 [visit here](https://insync.netlify.app/)
+### 🏠 [visit here](https://in-sync.netlify.app/)
 
 ## Installation
   >To install and run the app locally, you'll need to follow these steps:

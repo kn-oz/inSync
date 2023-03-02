@@ -32,6 +32,7 @@ export default function Find() {
   const [people, setPeople] = useState([]);
   const [index, setIndex] = useState(0);
 
+  console.log(people[index]);
   useEffect(() => {
     //console.log("use-effect to fetch people data is being called in find component")
     const getPeopleQuery = query(
@@ -140,7 +141,7 @@ export default function Find() {
               Interests{" "}
             </p>
             <div className="mt-2 flex flex-wrap">
-              {people[index].interests.map((interest) => (
+              {people[index].interests && people[index]?.interests.map((interest) => (
                 <p key={interest}>
                   <span className="bg-primary text-white inline-flex items-center mr-2 mb-2 rounded-full border border-gray py-2 px-4">
                     {interest}
